@@ -28,19 +28,23 @@ class BankInfo
     protected $card_type = 'unknown';
 
     /**
+     * @see https://github.com/braintree/credit-card-type/blob/master/index.js
+     * @see https://en.wikipedia.org/wiki/Payment_card_number
+     * @see https://github.com/ramoona/banks-db/blob/2a882c921e4c4e1d1ee452e97671aedfbe325abe/type.js
+     *
      * @var array
      */
     protected static $card_prefixes = [
         'electron' => '/^(4026|417500|4405|4508|4844|4913|4917)/',
         'interpayment' => '/^636/',
-        'unionpay' => '/^62/',
-        'maestro' => '/^(50|56|57|58|6)/',
+        'unionpay' => '/^(62|88)/',
+        'discover' => '/^6(?:011|4|5)/',
+        'maestro' => '/^(50|5[6-9]|6)/',
         'visa' => '/^4/',
-        'mastercard' => '/^(5[1-5]|[2221-2720])/',
+        'mastercard' => '/^(5[1-5]|(?:222[1-9]|22[3-9][0-9]|2[3-6][0-9]{2}|27[01][0-9]|2720))/', // [2221-2720]
         'amex' => '/^3[47]/',
-        'diners' => '/^3(?:0[0-5]|[68][0-9])/',
-        'discover' => '/^6(?:011|5[0-9]{2})/',
-        'jcb' => '/^(?:2131|1800|[3528-3589])/',
+        'diners' => '/^3(?:0([0-5]|95)|[689])/',
+        'jcb' => '/^(?:2131|1800|(?:352[89]|35[3-8][0-9]))/', // 3528-3589
         'mir' => '/^220[0-4]/',
     ];
 
@@ -63,6 +67,7 @@ class BankInfo
         foreach (self::$card_prefixes as $card_type => $card_prefix) {
             if (preg_match($card_prefix, $prefix)) {
                 $this->card_type = $card_type;
+                break;
             }
         }
     }
@@ -70,7 +75,7 @@ class BankInfo
     /**
      * Make this bank object unknown
      */
-    protected function makeUnknown()
+    protected function makeUnknown(): void
     {
         $this->is_unknown = true;
         $this->data = [

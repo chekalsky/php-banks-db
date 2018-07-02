@@ -11,11 +11,6 @@ class BankDb
     protected $database = [];
 
     /**
-     * @var string
-     */
-    protected $database_file_path;
-
-    /**
      * BankDb constructor.
      *
      * @param string|null $db_file_path
@@ -25,7 +20,6 @@ class BankDb
     public function __construct(string $db_file_path = null)
     {
         $this->initializeDatabase($db_file_path);
-        $this->loadDatabase();
     }
 
     /**
@@ -57,7 +51,7 @@ class BankDb
      *
      * @throws BankDbException
      */
-    protected function initializeDatabase(string $db_file_path = null)
+    protected function initializeDatabase(string $db_file_path = null): void
     {
         if ($db_file_path === null) {
             $db_file_path = __DIR__ . '/../db/bank_db.php';
@@ -67,15 +61,7 @@ class BankDb
             throw new BankDbException('Cannot find DB file');
         }
 
-        $this->database_file_path = $db_file_path;
-    }
-
-    /**
-     * Database preload
-     */
-    protected function loadDatabase()
-    {
-        $this->database = include $this->database_file_path;
+        $this->database = include $db_file_path;
     }
 
     /**
