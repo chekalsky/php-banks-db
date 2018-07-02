@@ -23,7 +23,7 @@ try {
 
     $result = [
         'is_unknown' => $bank_info->isUnknown(), // is bank unknown
-        'name' => $bank_info->getName(true),
+        'name' => $bank_info->getTitle(true),
         'color' => $bank_info->getColor(),
         'type' => $bank_info->getCardType(),
     ];
