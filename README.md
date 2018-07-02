@@ -1,5 +1,7 @@
 # PHP Banks DB
 
+[![Build Status](https://travis-ci.com/chekalskiy/php-bank-db.svg?branch=master)](https://travis-ci.com/chekalskiy/php-bank-db)
+
 > It is a PHP port of [ramoona's banks-db](https://github.com/ramoona/banks-db).
 
 Returns bank's name and brand color by bank card number's first digits (BIN, Issuer Identification Numbers, IIN).
