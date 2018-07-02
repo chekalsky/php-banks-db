@@ -12,6 +12,11 @@ class BankInfoTest extends TestCase
      */
     protected $bank_db;
 
+    /**
+     * @var string
+     */
+    protected $valid_prefix = '428906';
+
     protected function setUp()
     {
         $this->bank_db = new BankDb();
@@ -23,11 +28,13 @@ class BankInfoTest extends TestCase
         $bank_info_2 = $this->bank_db->getBankInfo('532130');
         $bank_info_3 = $this->bank_db->getBankInfo('5!3_2l1$3*0');
         $bank_info_4 = $this->bank_db->getBankInfo('5321300000000000');
+        $bank_info_5 = $this->bank_db->getBankInfo('');
 
         $this->assertFalse($bank_info_1->isUnknown());
         $this->assertSame($bank_info_2->getTitle(), $bank_info_1->getTitle());
         $this->assertSame($bank_info_3->getTitle(), $bank_info_1->getTitle());
         $this->assertSame($bank_info_4->getTitle(), $bank_info_1->getTitle());
+        $this->assertTrue($bank_info_5->isUnknown());
     }
 
     public function testCardTypes(): void
@@ -94,8 +101,29 @@ class BankInfoTest extends TestCase
     public function testBanks(): void
     {
         $this->assertSame('Rocketbank', $this->bank_db->getBankInfo('532130')->getTitle(false));
-        $this->assertSame('Alfa-Bank', $this->bank_db->getBankInfo('428906')->getTitle(false));
+        $this->assertSame('Alfa-Bank', $this->bank_db->getBankInfo($this->valid_prefix)->getTitle(false));
 
         // $this->assertSame('Millennium', $this->bank_db->getBankInfo('487474')->getTitle(false));
+    }
+
+    public function testColor(): void
+    {
+        $this->assertRegExp('/^#[a-f0-9]{6}$/', $this->bank_db->getBankInfo($this->valid_prefix)->getColor());
+        $this->assertRegExp('/^#[a-f0-9]{6}$/', $this->bank_db->getBankInfo('')->getColor());
+    }
+
+    public function testCountryCode(): void
+    {
+        $this->assertSame('ru', $this->bank_db->getBankInfo($this->valid_prefix)->getCountryCode());
+    }
+
+    public function testUrl(): void
+    {
+        $this->assertRegExp('/^https?:\/\//', $this->bank_db->getBankInfo($this->valid_prefix)->getUrl());
+    }
+
+    public function testDefunct(): void
+    {
+        $this->assertFalse($this->bank_db->getBankInfo($this->valid_prefix)->isDefunct());
     }
 }
