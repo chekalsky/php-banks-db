@@ -1,6 +1,6 @@
 # PHP Banks DB
 
-[![Build Status](https://travis-ci.com/chekalskiy/php-bank-db.svg?branch=master)](https://travis-ci.com/chekalskiy/php-bank-db)
+[![Build Status](https://travis-ci.com/chekalskiy/php-bank-db.svg?branch=master)](https://travis-ci.com/chekalskiy/php-bank-db) [![codecov](https://codecov.io/gh/chekalskiy/php-bank-db/branch/master/graph/badge.svg)](https://codecov.io/gh/chekalskiy/php-bank-db)
 
 > It is a PHP port of [ramoona's banks-db](https://github.com/ramoona/banks-db).
 

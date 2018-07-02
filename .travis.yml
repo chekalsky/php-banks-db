@@ -7,7 +7,7 @@ php:
 
 install:
   - travis_retry composer self-update
-  - travis_retry composer install --no-interaction --no-suggest --prefer-source --dev
+  - travis_retry composer install --no-interaction --no-suggest --prefer-dist --dev
 
 script:
   - vendor/bin/phpunit --coverage-clover=coverage.xml
