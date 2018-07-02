@@ -13,7 +13,7 @@ composer require chekalskiy/php-bank-db
 ### Basic usage
 
 ```php
-$card_prefix = $_GET['card_prefix']; // we only need first 6 digits
+$card_prefix = '5275 9400 0000 0000'; // we only need first 6 digits but it could be the whole card number
 
 try {
     $bank_db = new BankDb();
@@ -31,6 +31,10 @@ try {
     // todo handle exception
 }
 ```
+
+### About database
+
+We use simple PHP-file with an array inside (it's regenerates every time ramoona's repository is updated). It's very fast and simple way to work with data because of opcache enabled by default in PHP 7. But you can extend `BankDB` class to make it work with redis or something, but for most cases compiled php-file is OK.
 
 ### Contributions
 
