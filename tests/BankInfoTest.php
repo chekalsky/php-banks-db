@@ -25,9 +25,9 @@ class BankInfoTest extends TestCase
         $bank_info_4 = $this->bank_db->getBankInfo('5321300000000000');
 
         $this->assertFalse($bank_info_1->isUnknown());
-        $this->assertSame($bank_info_2->getName(), $bank_info_1->getName());
-        $this->assertSame($bank_info_3->getName(), $bank_info_1->getName());
-        $this->assertSame($bank_info_4->getName(), $bank_info_1->getName());
+        $this->assertSame($bank_info_2->getTitle(), $bank_info_1->getTitle());
+        $this->assertSame($bank_info_3->getTitle(), $bank_info_1->getTitle());
+        $this->assertSame($bank_info_4->getTitle(), $bank_info_1->getTitle());
     }
 
     public function testCardTypes(): void
@@ -89,5 +89,13 @@ class BankInfoTest extends TestCase
         // mir
         $this->assertSame('mir', $this->bank_db->getBankInfo('220000')->getCardType());
         $this->assertSame('mir', $this->bank_db->getBankInfo('220400')->getCardType());
+    }
+
+    public function testBanks(): void
+    {
+        $this->assertSame('Rocketbank', $this->bank_db->getBankInfo('532130')->getTitle(false));
+        $this->assertSame('Alfa-Bank', $this->bank_db->getBankInfo('428906')->getTitle(false));
+
+        // $this->assertSame('Millennium', $this->bank_db->getBankInfo('487474')->getTitle(false));
     }
 }

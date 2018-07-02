@@ -88,7 +88,7 @@ class BankInfo
         ];
     }
 
-    public function getName(bool $is_local = true): string
+    public function getTitle(bool $is_local = true): string
     {
         if ($is_local && isset($this->data['localTitle'])) {
             return $this->data['localTitle'];
