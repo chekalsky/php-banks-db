@@ -21,6 +21,8 @@ $database = [
     'max_length' => 0
 ];
 
+$bank_id = 0;
+
 $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($banks_db_path));
 
 /** @var SplFileInfo $file */
@@ -44,7 +46,7 @@ foreach ($rii as $file) {
         continue;
     }
 
-    $bank_id = sprintf('%s:%s', $bank_data['country'], $bank_data['name']);
+    ++$bank_id;
 
     $bank_data_stored = $bank_data;
     unset($bank_data_stored['prefixes']);
