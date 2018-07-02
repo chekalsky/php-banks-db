@@ -25,7 +25,7 @@ class BankInfo
     /**
      * @var string
      */
-    protected $prefix;
+    protected $card_type = 'unknown';
 
     /**
      * @var array
@@ -52,12 +52,19 @@ class BankInfo
      */
     public function __construct(array $data, string $prefix = '')
     {
+        $this->data = $data;
+
         if (!isset($data['name'])) {
             $this->makeUnknown();
         }
 
-        $this->data = $data;
-        $this->prefix = substr($prefix, 0, 8);
+        $prefix = substr($prefix, 0, 8);
+
+        foreach (self::$card_prefixes as $card_type => $card_prefix) {
+            if (preg_match($card_prefix, $prefix)) {
+                $this->card_type = $card_type;
+            }
+        }
     }
 
     /**
@@ -128,14 +135,6 @@ class BankInfo
      */
     public function getCardType(): string
     {
-        $prefix = $this->prefix;
-
-        foreach (self::$card_prefixes as $card_type => $card_prefix) {
-            if (preg_match($card_prefix, $prefix)) {
-                return $card_type;
-            }
-        }
-
-        return 'unknown';
+        return $this->card_type;
     }
 }
