@@ -48,10 +48,10 @@ class BankDb
         for ($l = $this->getMaxPrefixLength(); $l >= $this->getMinPrefixLength(); $l--) {
             $prefix = substr((string) $card_number, 0, $l);
 
-            $bank_id = $this->getBankIdByPrefix((int) $prefix);
+            $bank_id = $this->getBankIdByPrefix($prefix);
 
             if ($bank_id > 0) {
-                return new BankInfo($this->getBankInfoFromDatabase($bank_id));
+                return new BankInfo($this->getBankInfoFromDatabase($bank_id), $prefix);
             }
         }
 
@@ -87,14 +87,14 @@ class BankDb
     }
 
     /**
-     * @param int $prefix
+     * @param string $prefix
      *
      * @return int `0` if not found
      */
-    protected function getBankIdByPrefix(int $prefix): int
+    protected function getBankIdByPrefix(string $prefix): int
     {
-        if (isset($this->database['prefixes'][$prefix])) {
-            return (int) $this->database['prefixes'][$prefix];
+        if (isset($this->database['prefixes'][(int) $prefix])) {
+            return (int) $this->database['prefixes'][(int) $prefix];
         }
 
         return 0;
