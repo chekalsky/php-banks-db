@@ -1,0 +1,3 @@
+[submodule "source/banks-db"]
+	path = source/banks-db
+	url = https://github.com/ramoona/banks-db.git
