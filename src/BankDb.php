@@ -18,26 +18,18 @@ class BankDb
     /**
      * BankDb constructor.
      *
-     * @param string $db_file_path
+     * @param string|null $db_file_path
      *
      * @throws BankDbException
      */
-    public function __construct(string $db_file_path = './../db/bank_db.php')
+    public function __construct(string $db_file_path = null)
     {
-        if (!is_readable($db_file_path)) {
-            throw new BankDbException('Cannot find DB file');
-        }
-
-        $this->database_file_path = $db_file_path;
-
+        $this->initializeDatabase($db_file_path);
         $this->loadDatabase();
     }
 
     /**
      * @param string $card_number
-     *
-     * @throws BankDbNotFoundException if bank was not found
-     * @throws BankDbException         if internal error happened
      *
      * @return BankInfo
      */
@@ -55,7 +47,27 @@ class BankDb
             }
         }
 
-        throw new BankDbNotFoundException('Bank not found');
+        return new BankInfo([], $card_number);
+    }
+
+    /**
+     * Database init
+     *
+     * @param string|null $db_file_path
+     *
+     * @throws BankDbException
+     */
+    protected function initializeDatabase(string $db_file_path = null)
+    {
+        if ($db_file_path === null) {
+            $db_file_path = __DIR__ . '/../db/bank_db.php';
+        }
+
+        if (!is_readable($db_file_path)) {
+            throw new BankDbException('Cannot find DB file');
+        }
+
+        $this->database_file_path = $db_file_path;
     }
 
     /**

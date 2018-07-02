@@ -18,6 +18,11 @@ class BankInfo
     protected $data = [];
 
     /**
+     * @var bool
+     */
+    protected $is_unknown = false;
+
+    /**
      * @var string
      */
     protected $prefix;
@@ -44,31 +49,40 @@ class BankInfo
      *
      * @param array  $data
      * @param string $prefix
-     *
-     * @throws BankDbException
      */
     public function __construct(array $data, string $prefix = '')
     {
         if (!isset($data['name'])) {
-            throw new BankDbException('Invalid bank data');
+            $this->makeUnknown();
         }
 
         $this->data = $data;
-        $this->prefix = $prefix;
+        $this->prefix = substr($prefix, 0, 8);
     }
 
-    public function getName(): string
+    /**
+     * Make this bank object unknown
+     */
+    protected function makeUnknown()
     {
-        return $this->data['name'];
+        $this->is_unknown = true;
+        $this->data = [
+            'name' => 'unknown',
+            'localTitle' => 'Unknown Bank',
+            'engTitle' => 'Unknown Bank',
+            'country' => 'us',
+            'url' => '',
+            'color' => '#ffffff',
+        ];
     }
 
-    public function getTitle(bool $is_local = true): string
+    public function getName(bool $is_local = true): string
     {
         if ($is_local && isset($this->data['localTitle'])) {
             return $this->data['localTitle'];
         }
 
-        return $this->data['engTitle'] ?? $this->getName();
+        return $this->data['engTitle'] ?? $this->data['name'];
     }
 
     public function getCountryCode(): string
@@ -79,6 +93,30 @@ class BankInfo
     public function getUrl(): string
     {
         return $this->data['url'];
+    }
+
+    /**
+     * @return string in hex format `#0088cf`
+     */
+    public function getColor(): string
+    {
+        return $this->data['color'];
+    }
+
+    /**
+     * @return bool returns true for banks with revoked license
+     */
+    public function isDefunct(): bool
+    {
+        return isset($this->data['defunct']) && $this->data['defunct'];
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUnknown(): bool
+    {
+        return $this->is_unknown;
     }
 
     /**
@@ -99,21 +137,5 @@ class BankInfo
         }
 
         return 'unknown';
-    }
-
-    /**
-     * @return string in hex format `#0088cf`
-     */
-    public function getColor(): string
-    {
-        return $this->data['color'];
-    }
-
-    /**
-     * @return bool returns true for banks with revoked license
-     */
-    public function isDefunct(): bool
-    {
-        return isset($this->data['defunct']) && $this->data['defunct'];
     }
 }
