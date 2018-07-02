@@ -66,7 +66,7 @@ foreach ($rii as $file) {
     }
 }
 
-$database_export = sprintf('<?php return %s;', preg_replace("/\n\s+(\d)/", ' $1', var_export($database, true)));
+$database_export = sprintf('<?php return %s;', var_export($database, true));
 
 if (file_put_contents('db/bank_db.php', $database_export)) {
     echo sprintf("Successfully exported %d prefixes for %d banks with prefixes from %d to %d symbols length\n",
