@@ -1,0 +1,22 @@
+{
+  "name": "chekalskiy/php-bank-db",
+  "description": "PHP bank cards IIN/BIN database. Get bank info by card number",
+  "license": "MIT",
+  "keywords": ["bin", "card", "creditcard", "iin", "issuer identification numbers"],
+  "homepage": "https://github.com/chekalskiy/php-bank-db",
+  "authors": [
+    {
+      "name": "Ilya Chekalskiy",
+      "email": "ilya@chekalskiy.ru",
+      "homepage": "http://chekalskiy.ru"
+    }
+  ],
+  "require": {
+    "php": ">=7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "BankDb": "src/"
+    }
+  }
+}
