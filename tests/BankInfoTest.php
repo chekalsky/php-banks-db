@@ -29,12 +29,14 @@ class BankInfoTest extends TestCase
         $bank_info_3 = $this->bank_db->getBankInfo('5!3_2l1$3*0');
         $bank_info_4 = $this->bank_db->getBankInfo('5321300000000000');
         $bank_info_5 = $this->bank_db->getBankInfo('');
+        $bank_info_6 = $this->bank_db->getBankInfo('48153');
 
         $this->assertFalse($bank_info_1->isUnknown());
         $this->assertSame($bank_info_2->getTitle(), $bank_info_1->getTitle());
         $this->assertSame($bank_info_3->getTitle(), $bank_info_1->getTitle());
         $this->assertSame($bank_info_4->getTitle(), $bank_info_1->getTitle());
         $this->assertTrue($bank_info_5->isUnknown());
+        $this->assertFalse($bank_info_6->isUnknown());
     }
 
     public function testCardTypes(): void
@@ -67,10 +69,12 @@ class BankInfoTest extends TestCase
         $this->assertSame('maestro', $this->bank_db->getBankInfo('639000')->getCardType());
 
         // visa
+        $this->assertSame('visa', $this->bank_db->getBankInfo('4')->getCardType());
         $this->assertSame('visa', $this->bank_db->getBankInfo('411111')->getCardType());
         $this->assertSame('visa', $this->bank_db->getBankInfo('400000')->getCardType());
 
         // mastercard
+        $this->assertSame('mastercard', $this->bank_db->getBankInfo('51')->getCardType());
         $this->assertSame('mastercard', $this->bank_db->getBankInfo('510000')->getCardType());
         $this->assertSame('mastercard', $this->bank_db->getBankInfo('520000')->getCardType());
         $this->assertSame('mastercard', $this->bank_db->getBankInfo('530000')->getCardType());

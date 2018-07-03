@@ -17,11 +17,10 @@ if (!file_exists($banks_db_path . '/index.js')) {
 $database = [
     'prefixes' => [],
     'banks' => [],
-    'min_length' => 99,
-    'max_length' => 0
 ];
 
 $bank_id = 0;
+$max_length = 6;
 
 $rii = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($banks_db_path));
 
@@ -56,29 +55,46 @@ foreach ($rii as $file) {
     foreach ($bank_data['prefixes'] as $prefix) {
         $len = strlen((string) $prefix);
 
-        $database['min_length'] = min($database['min_length'], $len);
-        $database['max_length'] = max($database['max_length'], $len);
+        for ($i = $len; $i <= $len; $i++) {
+            $len_diff = $max_length - $len;
 
-        if (isset($database['prefixes'][$prefix])) {
-            printError(sprintf('Duplicated prefix: %s (%s <-> %s)', $prefix, $bank_id, $database['prefixes'][$prefix]));
-            continue;
+            if ($len_diff > 0) {
+                for ($l = 1; $l <= $len_diff; $l++) {
+                    $count_prefixes = 10 ** $l;
+
+                    for ($k = 0; $k < $count_prefixes; $k++) {
+                        $new_prefix = (int) sprintf('%d%d', $prefix, $k);
+
+                        addPrefix($new_prefix, $bank_id, $database);
+                    }
+                }
+            } else {
+                addPrefix($prefix, $bank_id, $database);
+            }
         }
-
-        $database['prefixes'][$prefix] = $bank_id;
     }
 }
 
 $database_export = sprintf('<?php return %s;', var_export($database, true));
 
 if (file_put_contents('db/bank_db.php', $database_export)) {
-    echo sprintf("Successfully exported %d prefixes for %d banks with prefixes from %d to %d symbols length\n",
+    echo sprintf("Successfully exported %d prefixes for %d banks with prefixes\n",
         count($database['prefixes']),
-        count($database['banks']),
-        $database['min_length'],
-        $database['max_length']);
+        count($database['banks']));
 }
 
 function printError(string $text)
 {
     echo '! ' . $text . "\n";
+}
+
+function addPrefix(int $prefix, int $bank_id, array &$database)
+{
+    if (isset($database['prefixes'][$prefix])) {
+        printError(sprintf('Duplicated prefix: %s (%s <-> %s)', $prefix, $bank_id, $database['prefixes'][$prefix]));
+
+        return;
+    }
+
+    $database['prefixes'][$prefix] = $bank_id;
 }

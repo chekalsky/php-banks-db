@@ -11,6 +11,11 @@ class BankDb
     protected $database = [];
 
     /**
+     * @var int
+     */
+    protected $prefix_length = 6;
+
+    /**
      * BankDb constructor.
      *
      * @param string|null $db_file_path
@@ -31,14 +36,12 @@ class BankDb
     {
         $card_number = preg_replace('/\D/', '', $card_number);
 
-        for ($l = $this->getMaxPrefixLength(); $l >= $this->getMinPrefixLength(); $l--) {
-            $prefix = substr((string) $card_number, 0, $l);
+        $prefix = str_pad(substr((string) $card_number, 0, $this->prefix_length), $this->prefix_length, '0');
 
-            $bank_id = $this->getBankIdByPrefix($prefix);
+        $bank_id = $this->getBankIdByPrefix($prefix);
 
-            if ($bank_id > 0) {
-                return new BankInfo($this->getBankInfoFromDatabase($bank_id), $prefix);
-            }
+        if ($bank_id > 0) {
+            return new BankInfo($this->getBankInfoFromDatabase($bank_id), $prefix);
         }
 
         return new BankInfo([], $card_number);
@@ -62,26 +65,6 @@ class BankDb
         }
 
         $this->database = include $db_file_path;
-    }
-
-    /**
-     * What is the maximum length of prefix in database
-     *
-     * @return int
-     */
-    protected function getMaxPrefixLength(): int
-    {
-        return $this->database['max_length'] ?? 6;
-    }
-
-    /**
-     * What is the minimum length of prefix in database
-     *
-     * @return int
-     */
-    protected function getMinPrefixLength(): int
-    {
-        return $this->database['min_length'] ?? 5;
     }
 
     /**
