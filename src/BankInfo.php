@@ -12,6 +12,8 @@ namespace BankDb;
  */
 class BankInfo
 {
+    protected const PREFIX_LENGTH = 8;
+
     /**
      * @var array
      */
@@ -20,12 +22,12 @@ class BankInfo
     /**
      * @var bool
      */
-    protected $is_unknown = false;
+    protected $isUnknown = false;
 
     /**
      * @var string
      */
-    protected $card_type = 'unknown';
+    protected $cardType = 'unknown';
 
     /**
      * @see https://github.com/braintree/credit-card-type/blob/master/index.js
@@ -34,7 +36,7 @@ class BankInfo
      *
      * @var array
      */
-    protected static $card_prefixes = [
+    protected static $cardPrefixes = [
         'electron' => '/^(4026|417500|4405|4508|4844|4913|4917)/',
         'interpayment' => '/^636/',
         'unionpay' => '/^(62|88)/',
@@ -62,35 +64,19 @@ class BankInfo
             $this->makeUnknown();
         }
 
-        $prefix = substr($prefix, 0, 8);
+        $prefix = substr($prefix, 0, static::PREFIX_LENGTH);
 
-        foreach (self::$card_prefixes as $card_type => $card_prefix) {
-            if (preg_match($card_prefix, $prefix)) {
-                $this->card_type = $card_type;
+        foreach (static::$cardPrefixes as $cardType => $cardPrefix) {
+            if (preg_match($cardPrefix, $prefix)) {
+                $this->cardType = $cardType;
                 break;
             }
         }
     }
 
-    /**
-     * Make this bank object unknown
-     */
-    protected function makeUnknown(): void
+    public function getTitle(bool $isLocal = true): string
     {
-        $this->is_unknown = true;
-        $this->data = [
-            'name' => 'unknown',
-            'localTitle' => 'Unknown Bank',
-            'engTitle' => 'Unknown Bank',
-            'country' => 'us',
-            'url' => '',
-            'color' => '#ffffff',
-        ];
-    }
-
-    public function getTitle(bool $is_local = true): string
-    {
-        if ($is_local && isset($this->data['localTitle'])) {
+        if ($isLocal && isset($this->data['localTitle'])) {
             return $this->data['localTitle'];
         }
 
@@ -128,7 +114,7 @@ class BankInfo
      */
     public function isUnknown(): bool
     {
-        return $this->is_unknown;
+        return $this->isUnknown;
     }
 
     /**
@@ -140,6 +126,22 @@ class BankInfo
      */
     public function getCardType(): string
     {
-        return $this->card_type;
+        return $this->cardType;
+    }
+
+    /**
+     * Make this bank object unknown
+     */
+    protected function makeUnknown(): void
+    {
+        $this->isUnknown = true;
+        $this->data = [
+            'name' => 'unknown',
+            'localTitle' => 'Unknown Bank',
+            'engTitle' => 'Unknown Bank',
+            'country' => 'us',
+            'url' => '',
+            'color' => '#ffffff',
+        ];
     }
 }

@@ -5,77 +5,74 @@ namespace BankDb;
 
 class BankDb
 {
+    protected const PREFIX_LENGTH = 6;
+
     /**
      * @var array
      */
     protected $database = [];
 
     /**
-     * @var int
-     */
-    protected $prefix_length = 6;
-
-    /**
      * BankDb constructor.
      *
-     * @param string|null $db_file_path
+     * @param string|null $dbFilePath
      *
      * @throws BankDbException
      */
-    public function __construct(string $db_file_path = null)
+    public function __construct(string $dbFilePath = null)
     {
-        $this->initializeDatabase($db_file_path);
+        $this->initializeDatabase($dbFilePath);
     }
 
     /**
-     * @param string $card_number
+     * @param string $cardNumber
      *
      * @return BankInfo
      */
-    public function getBankInfo(string $card_number): BankInfo
+    public function getBankInfo(string $cardNumber): BankInfo
     {
-        $card_number = preg_replace('/\D/', '', $card_number);
+        $cardNumber = preg_replace('/\D/', '', $cardNumber);
 
-        $prefix = str_pad(substr((string) $card_number, 0, $this->prefix_length), $this->prefix_length, '0');
+        $prefix = str_pad(substr((string) $cardNumber, 0, static::PREFIX_LENGTH), static::PREFIX_LENGTH, '0');
 
-        $bank_id = $this->getBankIdByPrefix($prefix);
+        $bankId = $this->getBankIdByPrefix((int) $prefix);
 
-        if ($bank_id > 0) {
-            return new BankInfo($this->getBankInfoFromDatabase($bank_id), $prefix);
+        if ($bankId > 0) {
+            return new BankInfo($this->getBankInfoFromDatabase($bankId), $prefix);
         }
 
-        return new BankInfo([], $card_number);
+        return new BankInfo([], $cardNumber);
     }
 
     /**
      * Database init
      *
-     * @param string|null $db_file_path
+     * @param string|null $filePath
      *
      * @throws BankDbException
      */
-    protected function initializeDatabase(string $db_file_path = null): void
+    protected function initializeDatabase(string $filePath = null): void
     {
-        if ($db_file_path === null) {
-            $db_file_path = __DIR__ . '/../db/bank_db.php';
+        if ($filePath === null) {
+            $filePath = __DIR__ . '/../db/bank_db.php';
         }
 
-        if (!is_readable($db_file_path)) {
+        if (!is_readable($filePath)) {
             throw new BankDbException('Cannot find DB file');
         }
 
-        $this->database = include $db_file_path;
+        $this->database = include $filePath;
     }
 
     /**
-     * @param string $prefix
+     * @param int $prefix
      *
      * @return int `0` if not found
      */
-    protected function getBankIdByPrefix(string $prefix): int
+    protected function getBankIdByPrefix(int $prefix): int
     {
-        if (isset($this->database['prefixes'][(int) $prefix])) {
-            return (int) $this->database['prefixes'][(int) $prefix];
+        if (isset($this->database['prefixes'][$prefix])) {
+            return (int) $this->database['prefixes'][$prefix];
         }
 
         return 0;
