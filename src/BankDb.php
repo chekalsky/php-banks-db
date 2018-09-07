@@ -5,6 +5,9 @@ namespace BankDb;
 
 class BankDb
 {
+    /**
+     * How many digits use to search
+     */
     protected const PREFIX_LENGTH = 6;
 
     /**
@@ -15,53 +18,53 @@ class BankDb
     /**
      * BankDb constructor.
      *
-     * @param string|null $dbFilePath
+     * @param string|null $db_file_path
      *
      * @throws BankDbException
      */
-    public function __construct(string $dbFilePath = null)
+    public function __construct(string $db_file_path = null)
     {
-        $this->initializeDatabase($dbFilePath);
+        $this->initializeDatabase($db_file_path);
     }
 
     /**
-     * @param string $cardNumber
+     * @param string $card_number
      *
      * @return BankInfo
      */
-    public function getBankInfo(string $cardNumber): BankInfo
+    public function getBankInfo(string $card_number): BankInfo
     {
-        $cardNumber = preg_replace('/\D/', '', $cardNumber);
+        $card_number = preg_replace('/\D/', '', $card_number);
 
-        $prefix = str_pad(substr((string) $cardNumber, 0, static::PREFIX_LENGTH), static::PREFIX_LENGTH, '0');
+        $prefix = str_pad(substr((string) $card_number, 0, static::PREFIX_LENGTH), static::PREFIX_LENGTH, '0');
 
-        $bankId = $this->getBankIdByPrefix((int) $prefix);
+        $bank_id = $this->getBankIdByPrefix((int) $prefix);
 
-        if ($bankId > 0) {
-            return new BankInfo($this->getBankInfoFromDatabase($bankId), $prefix);
+        if ($bank_id > 0) {
+            return new BankInfo($this->getBankInfoFromDatabase($bank_id), $prefix);
         }
 
-        return new BankInfo([], $cardNumber);
+        return new BankInfo([], $card_number);
     }
 
     /**
      * Database init
      *
-     * @param string|null $filePath
+     * @param string|null $file_path
      *
      * @throws BankDbException
      */
-    protected function initializeDatabase(string $filePath = null): void
+    protected function initializeDatabase(string $file_path = null): void
     {
-        if ($filePath === null) {
-            $filePath = __DIR__ . '/../db/bank_db.php';
+        if ($file_path === null) {
+            $file_path = __DIR__ . '/../db/bank_db.php';
         }
 
-        if (!is_readable($filePath)) {
+        if (!is_readable($file_path)) {
             throw new BankDbException('Cannot find DB file');
         }
 
-        $this->database = include $filePath;
+        $this->database = include $file_path;
     }
 
     /**

@@ -12,6 +12,9 @@ namespace BankDb;
  */
 class BankInfo
 {
+    /**
+     * How many digits to store
+     */
     protected const PREFIX_LENGTH = 8;
 
     /**
@@ -22,12 +25,12 @@ class BankInfo
     /**
      * @var bool
      */
-    protected $isUnknown = false;
+    protected $is_unknown = false;
 
     /**
      * @var string
      */
-    protected $cardType = 'unknown';
+    protected $card_type = 'unknown';
 
     /**
      * @see https://github.com/braintree/credit-card-type/blob/master/index.js
@@ -36,7 +39,7 @@ class BankInfo
      *
      * @var array
      */
-    protected static $cardPrefixes = [
+    protected static $card_prefixes = [
         'electron' => '/^(4026|417500|4405|4508|4844|4913|4917)/',
         'interpayment' => '/^636/',
         'unionpay' => '/^(62|88)/',
@@ -66,17 +69,17 @@ class BankInfo
 
         $prefix = substr($prefix, 0, static::PREFIX_LENGTH);
 
-        foreach (static::$cardPrefixes as $cardType => $cardPrefix) {
-            if (preg_match($cardPrefix, $prefix)) {
-                $this->cardType = $cardType;
+        foreach (static::$card_prefixes as $card_type => $card_prefix) {
+            if (preg_match($card_prefix, $prefix)) {
+                $this->card_type = $card_type;
                 break;
             }
         }
     }
 
-    public function getTitle(bool $isLocal = true): string
+    public function getTitle(bool $is_local = true): string
     {
-        if ($isLocal && isset($this->data['localTitle'])) {
+        if ($is_local && isset($this->data['localTitle'])) {
             return $this->data['localTitle'];
         }
 
@@ -114,7 +117,7 @@ class BankInfo
      */
     public function isUnknown(): bool
     {
-        return $this->isUnknown;
+        return $this->is_unknown;
     }
 
     /**
@@ -126,7 +129,7 @@ class BankInfo
      */
     public function getCardType(): string
     {
-        return $this->cardType;
+        return $this->card_type;
     }
 
     /**
@@ -134,7 +137,7 @@ class BankInfo
      */
     protected function makeUnknown(): void
     {
-        $this->isUnknown = true;
+        $this->is_unknown = true;
         $this->data = [
             'name' => 'unknown',
             'localTitle' => 'Unknown Bank',
