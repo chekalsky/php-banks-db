@@ -13,6 +13,11 @@ namespace BankDb;
 class BankInfo
 {
     /**
+     * How many digits to store
+     */
+    protected const PREFIX_LENGTH = 8;
+
+    /**
      * @var array
      */
     protected $data = [];
@@ -62,30 +67,14 @@ class BankInfo
             $this->makeUnknown();
         }
 
-        $prefix = substr($prefix, 0, 8);
+        $prefix = substr($prefix, 0, static::PREFIX_LENGTH);
 
-        foreach (self::$card_prefixes as $card_type => $card_prefix) {
+        foreach (static::$card_prefixes as $card_type => $card_prefix) {
             if (preg_match($card_prefix, $prefix)) {
                 $this->card_type = $card_type;
                 break;
             }
         }
-    }
-
-    /**
-     * Make this bank object unknown
-     */
-    protected function makeUnknown(): void
-    {
-        $this->is_unknown = true;
-        $this->data = [
-            'name' => 'unknown',
-            'localTitle' => 'Unknown Bank',
-            'engTitle' => 'Unknown Bank',
-            'country' => 'us',
-            'url' => '',
-            'color' => '#ffffff',
-        ];
     }
 
     public function getTitle(bool $is_local = true): string
@@ -141,5 +130,21 @@ class BankInfo
     public function getCardType(): string
     {
         return $this->card_type;
+    }
+
+    /**
+     * Make this bank object unknown
+     */
+    protected function makeUnknown(): void
+    {
+        $this->is_unknown = true;
+        $this->data = [
+            'name' => 'unknown',
+            'localTitle' => 'Unknown Bank',
+            'engTitle' => 'Unknown Bank',
+            'country' => 'us',
+            'url' => '',
+            'color' => '#ffffff',
+        ];
     }
 }
