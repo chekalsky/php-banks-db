@@ -12,7 +12,7 @@ class BankDbTest extends TestCase
      */
     protected $bank_db;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->bank_db = new BankDb();
     }
