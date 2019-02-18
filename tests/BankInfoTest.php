@@ -17,7 +17,7 @@ class BankInfoTest extends TestCase
      */
     protected $valid_prefix = '428906';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->bank_db = new BankDb();
     }
