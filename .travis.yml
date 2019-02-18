@@ -6,10 +6,10 @@ php:
 
 install:
   - travis_retry composer self-update
-  - travis_retry composer install --no-interaction --no-suggest --prefer-dist --dev
+  - travis_retry composer install --no-interaction --no-suggest --prefer-dist
 
 script:
-  - vendor/bin/phpunit --coverage-clover=coverage.xml
+  - composer test
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)

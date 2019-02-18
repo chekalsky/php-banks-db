@@ -21,5 +21,13 @@
     "psr-4": {
       "BankDb\\": "src/"
     }
+  },
+  "scripts": {
+    "test": [
+      "vendor/bin/phpunit --coverage-clover=coverage.xml"
+    ],
+    "rebuild": [
+      "php parse.php"
+    ]
   }
 }

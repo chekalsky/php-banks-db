@@ -38,9 +38,12 @@ try {
 
 We use simple PHP-file with an array inside (it's regenerates every time ramoona's repository is updated). It's very fast and simple way to work with data because of opcache enabled by default in PHP 7. But you can extend `BankDB` class to make it work with redis or something, but for most cases compiled php-file is OK.
 
+#### Database update
+Database updates from [original library](https://github.com/ramoona/banks-db) by me. To update php cache file after manual database change run `composer rebuild`.
+
 ### Contributions
 
-Feel free to open [an issue](https://github.com/chekalskiy/php-bank-db/issues) on every question you have.
+Feel free to open [an issue](https://github.com/chekalskiy/php-bank-db/issues) on every question you have. If you have new prefixes for database please commit them to [ramoona/banks-db repository](https://github.com/ramoona/banks-db) — I will update them once your PR will me merged there.
 
 ---
 
