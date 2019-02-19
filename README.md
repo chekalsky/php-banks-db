@@ -1,6 +1,6 @@
 # PHP Banks DB
 
-[![Build Status](https://travis-ci.com/chekalskiy/php-bank-db.svg?branch=master)](https://travis-ci.com/chekalskiy/php-bank-db) [![codecov](https://codecov.io/gh/chekalskiy/php-bank-db/branch/master/graph/badge.svg)](https://codecov.io/gh/chekalskiy/php-bank-db)
+[![Build Status](https://travis-ci.com/chekalskiy/php-banks-db.svg?branch=master)](https://travis-ci.com/chekalskiy/php-banks-db) [![codecov](https://codecov.io/gh/chekalskiy/php-banks-db/branch/master/graph/badge.svg)](https://codecov.io/gh/chekalskiy/php-banks-db)
 
 > It is a PHP port of [ramoona's banks-db](https://github.com/ramoona/banks-db).
 
@@ -9,7 +9,7 @@ Returns bank's name and brand color by bank card number's first digits (BIN, Iss
 ### Installation
 
 ```
-composer require chekalskiy/php-bank-db
+composer require chekalskiy/php-banks-db
 ```
 
 ### Basic usage
@@ -43,7 +43,7 @@ Database updates from [original library](https://github.com/ramoona/banks-db) by
 
 ### Contributions
 
-Feel free to open [an issue](https://github.com/chekalskiy/php-bank-db/issues) on every question you have. If you have new prefixes for database please commit them to [ramoona/banks-db repository](https://github.com/ramoona/banks-db) — I will update them once your PR will me merged there.
+Feel free to open [an issue](https://github.com/chekalskiy/php-banks-db/issues) on every question you have. If you have new prefixes for database please commit them to [ramoona/banks-db repository](https://github.com/ramoona/banks-db) — I will update them once your PR will me merged there.
 
 ---
 
