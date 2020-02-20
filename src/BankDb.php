@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace BankDb;
@@ -18,7 +19,7 @@ class BankDb
     /**
      * BankDb constructor.
      *
-     * @param string|null $db_file_path
+     * @param null|string $db_file_path
      *
      * @throws BankDbException
      */
@@ -50,7 +51,7 @@ class BankDb
     /**
      * Database init
      *
-     * @param string|null $file_path
+     * @param null|string $file_path
      *
      * @throws BankDbException
      */

@@ -1,4 +1,7 @@
 <?php
+
+declare(strict_types=1);
+
 /**
  * This script needed only for one-time building the database after the submodule update
  */
@@ -78,9 +81,11 @@ foreach ($rii as $file) {
 $database_export = sprintf('<?php return %s;', var_export($database, true));
 
 if (file_put_contents('db/bank_db.php', $database_export)) {
-    echo sprintf("Successfully exported %d prefixes for %d banks with prefixes\n",
+    echo sprintf(
+        "Successfully exported %d prefixes for %d banks with prefixes\n",
         count($database['prefixes']),
-        count($database['banks']));
+        count($database['banks'])
+    );
 }
 
 function printError(string $text)
