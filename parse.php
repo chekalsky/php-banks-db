@@ -45,6 +45,7 @@ foreach ($rii as $file) {
 
     if (!isset($bank_data['prefixes'])) {
         printError('Corrupted file: ' . $file->getPathname());
+
         continue;
     }
 
@@ -84,7 +85,7 @@ if (file_put_contents('db/bank_db.php', $database_export)) {
     echo sprintf(
         "Successfully exported %d prefixes for %d banks with prefixes\n",
         count($database['prefixes']),
-        count($database['banks'])
+        count($database['banks']),
     );
 }
 
