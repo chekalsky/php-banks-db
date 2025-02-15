@@ -2,9 +2,13 @@
 
 declare(strict_types=1);
 
+require_once __DIR__ . '/vendor/autoload.php';
+
 /**
  * This script needed only for one-time building the database after the submodule update
  */
+
+use Symfony\Component\VarExporter\VarExporter;
 
 $banks_db_path = __DIR__ . '/banks-db/banks';
 
@@ -79,7 +83,7 @@ foreach ($rii as $file) {
     }
 }
 
-$database_export = sprintf('<?php return %s;', var_export($database, true));
+$database_export = sprintf('<?php return %s;', VarExporter::export($database));
 
 if (file_put_contents('db/bank_db.php', $database_export)) {
     echo sprintf(
@@ -89,12 +93,12 @@ if (file_put_contents('db/bank_db.php', $database_export)) {
     );
 }
 
-function printError(string $text)
+function printError(string $text): void
 {
     echo '! ' . $text . "\n";
 }
 
-function addPrefix(int $prefix, int $bank_id, array &$database)
+function addPrefix(int $prefix, int $bank_id, array &$database): void
 {
     if (isset($database['prefixes'][$prefix])) {
         printError(sprintf('Duplicated prefix: %s (%s <-> %s)', $prefix, $bank_id, $database['prefixes'][$prefix]));
