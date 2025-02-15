@@ -1,0 +1,106 @@
+name: PHP Tests
+
+on:
+  pull_request:
+
+jobs:
+  php-lint:
+    name: PHP Lint
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: [ '8.3', '8.4' ]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP with tools
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          tools: php-cs-fixer, cs2pr
+
+      - name: PHP CS Fixer
+        #run: php-cs-fixer fix --using-cache=no --dry-run --format=checkstyle | cs2pr
+        # tmp fix for PHP 8.4
+        run: PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --using-cache=no --dry-run --format=checkstyle | cs2pr
+
+  php-unit:
+    name: PHP Unit Tests (php${{ matrix.php-versions }})
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: [ '8.3', '8.4' ]
+        experimental: [ false ]
+        #include:
+        #  - php-versions: '8.1'
+        #    experimental: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP with tools
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          tools: composer
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Setup problem matchers for PHPUnit
+        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: PHPUnit
+        run: vendor/bin/phpunit
+
+  psalm:
+    name: PHP Static Analysis (php${{ matrix.php-versions }})
+    runs-on: ubuntu-latest
+    continue-on-error: ${{ matrix.experimental }}
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: [ '8.3', '8.4' ]
+        experimental: [ false ]
+        #include:
+        #  - php-versions: '8.1'
+        #    experimental: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP with tools
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          tools: composer, psalm
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: |
+          echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+      - name: Psalm
+        run: psalm --output-format=github

@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace BankDb;
 
-class BankDbException extends \Exception
-{
-}
+use Exception;
+
+class BankDbException extends Exception {}
