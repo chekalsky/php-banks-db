@@ -103,7 +103,7 @@ class BankInfoTest extends TestCase
     public static function banksProvider(): array
     {
         return [
-            'Rocketbank' => ['532130', 'Rocketbank'],
+            'Bank Otkritie' => ['532130', 'Bank Otkritie'],
             'Alfa-Bank' => ['428906', 'Alfa-Bank'],
         ];
     }
