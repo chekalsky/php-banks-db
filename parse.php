@@ -83,7 +83,7 @@ foreach ($rii as $file) {
     }
 }
 
-$database_export = sprintf("<?php\n\nreturn %s;", VarExporter::export($database) . "\n");
+$database_export = sprintf("<?php\n\nreturn %s;\n", VarExporter::export($database));
 
 if (file_put_contents('db/bank_db.php', $database_export)) {
     echo sprintf(
