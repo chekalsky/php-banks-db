@@ -85,7 +85,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          tools: composer
+          tools: composer, psalm
 
       - name: Get Composer Cache Directory
         id: composer-cache
@@ -103,4 +103,4 @@ jobs:
         run: composer install --prefer-dist --no-progress
 
       - name: Psalm
-        run: vendor/bin/psalm --output-format=github
+        run: psalm --output-format=github
