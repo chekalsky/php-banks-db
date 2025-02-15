@@ -6,21 +6,18 @@ namespace BankDb;
 
 use PHPUnit\Framework\TestCase;
 
-class BankDbTest extends TestCase
+final class BankDbTest extends TestCase
 {
-    /**
-     * @var BankDb
-     */
-    protected $bank_db;
+    protected BankDb $bankDb;
 
     protected function setUp(): void
     {
-        $this->bank_db = new BankDb();
+        $this->bankDb = new BankDb();
     }
 
     public function testCanBeConstructed(): void
     {
-        $this->assertNotEmpty($this->bank_db);
+        $this->assertNotEmpty($this->bankDb);
     }
 
     public function testExceptionIfDatabaseNotFound(): void
@@ -32,7 +29,7 @@ class BankDbTest extends TestCase
 
     public function testGetBankInfoIsWorking(): void
     {
-        $bank_info = $this->bank_db->getBankInfo('400000');
+        $bank_info = $this->bankDb->getBankInfo('400000');
 
         $this->assertTrue($bank_info->isUnknown());
     }

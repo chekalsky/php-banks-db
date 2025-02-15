@@ -16,22 +16,11 @@ class BankInfo
     /**
      * How many digits to store
      */
-    protected const PREFIX_LENGTH = 8;
+    protected const int PREFIX_LENGTH = 8;
 
-    /**
-     * @var array
-     */
-    protected $data = [];
+    protected bool $is_unknown = false;
 
-    /**
-     * @var bool
-     */
-    protected $is_unknown = false;
-
-    /**
-     * @var string
-     */
-    protected $card_type = 'unknown';
+    protected string $card_type = 'unknown';
 
     /**
      * @see https://github.com/braintree/credit-card-type/blob/master/index.js
@@ -40,7 +29,7 @@ class BankInfo
      *
      * @var array
      */
-    protected static $card_prefixes = [
+    protected static array $card_prefixes = [
         'electron' => '/^(4026|417500|4405|4508|4844|4913|4917)/',
         'interpayment' => '/^636/',
         'unionpay' => '/^(62|88)/',
@@ -54,17 +43,9 @@ class BankInfo
         'mir' => '/^220[0-4]/',
     ];
 
-    /**
-     * BankInfo constructor.
-     *
-     * @param array  $data
-     * @param string $prefix
-     */
-    public function __construct(array $data, string $prefix = '')
+    public function __construct(protected array $data, string $prefix = '')
     {
-        $this->data = $data;
-
-        if (!isset($data['name'])) {
+        if (!isset($this->data['name'])) {
             $this->makeUnknown();
         }
 
