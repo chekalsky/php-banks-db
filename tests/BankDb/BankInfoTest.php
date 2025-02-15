@@ -27,7 +27,7 @@ class BankInfoTest extends TestCase
         if ($compareWith !== null) {
             $this->assertSame(
                 $this->bankDb->getBankInfo($compareWith)->getTitle(),
-                $bankInfo->getTitle()
+                $bankInfo->getTitle(),
             );
         }
     }
@@ -113,7 +113,7 @@ class BankInfoTest extends TestCase
     {
         $this->assertMatchesRegularExpression(
             '/^#[a-f0-9]{6}$/',
-            $this->bankDb->getBankInfo($prefix)->getColor()
+            $this->bankDb->getBankInfo($prefix)->getColor(),
         );
     }
 
@@ -134,7 +134,7 @@ class BankInfoTest extends TestCase
     {
         $this->assertMatchesRegularExpression(
             '/^https?:\/\//',
-            $this->bankDb->getBankInfo('428906')->getUrl()
+            $this->bankDb->getBankInfo('428906')->getUrl(),
         );
     }
 
